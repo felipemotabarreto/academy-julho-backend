@@ -219,7 +219,6 @@ async function createPost(req, res) {
 
     return res.status(201).json(post, { success: true });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: "Error creating the post", success: false });
   }
 }
