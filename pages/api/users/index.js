@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../../db/prisma";
+import { prisma } from "../../../db/prisma";
 
 /**
  * @swagger
