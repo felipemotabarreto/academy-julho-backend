@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { PrismaClient } from "../../../db/prisma";
 
 /**
  * @swagger
  *
- * /api/user:
+ * /api/users:
  *   get:
  *     summary: Get user by email
  *     tags:
@@ -33,12 +31,12 @@ const prisma = new PrismaClient();
  *                   type: string
  *                 email:
  *                   type: string
- *               example:   # Sample object
+ *               example:
  *                 id: 0
  *                 name: "User Name"
  *                 email: "user.name@email.com"
  */
-export default function user(req, res) {
+export default function handler(req, res) {
   if (req.method === "GET") {
     return getUserByEmail(req, res);
   } else {
@@ -59,12 +57,10 @@ async function getUserByEmail(req, res) {
     if (user) {
       return res.status(200).json(user, { success: true });
     }
-    res
-      .status(400)
-      .json({
-        error: "Could not found user with specified email",
-        success: false,
-      });
+    res.status(400).json({
+      error: "Could not found user with specified email",
+      success: false,
+    });
   } catch (error) {
     res
       .status(500)
