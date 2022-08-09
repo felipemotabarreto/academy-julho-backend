@@ -1,4 +1,5 @@
 import { prisma } from "../../../db/prisma";
+import cors from "../../../utils/cors";
 
 /**
  * @openapi
@@ -46,7 +47,9 @@ import { prisma } from "../../../db/prisma";
  *                 title: "Comment title"
  *                 content: "Comment content"
  */
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  await cors();
+
   if (req.method === "POST") {
     return createComment(req, res);
   } else {

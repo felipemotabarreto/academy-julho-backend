@@ -1,4 +1,5 @@
 import { prisma } from "../../../db/prisma";
+import cors from "../../../utils/cors";
 
 /**
  * @openapi
@@ -86,7 +87,9 @@ import { prisma } from "../../../db/prisma";
  *                   email: "user.name@email.com"
  *
  */
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  await cors();
+
   if (req.method === "GET") {
     return getPostData(req, res);
   } else {

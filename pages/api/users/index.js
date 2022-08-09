@@ -1,21 +1,5 @@
 import { prisma } from "../../../db/prisma";
-import Cors from "cors";
-
-const cors = Cors({
-  methods: ["GET"],
-});
-
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-
-      return resolve(result);
-    });
-  });
-}
+import cors from "../../../utils/cors";
 
 /**
  * @swagger
@@ -53,7 +37,8 @@ function runMiddleware(req, res, fn) {
  *                 name: "User Name"
  *                 email: "user.name@email.com"
  */
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  await cors();
   if (req.method === "GET") {
     return getUserByEmail(req, res);
   } else {
@@ -64,7 +49,6 @@ export default function handler(req, res) {
 }
 
 async function getUserByEmail(req, res) {
-  await runMiddleware(req, res, cors);
   const email = req.query.email;
 
   if (!email) {

@@ -1,4 +1,5 @@
 import { prisma } from "../../../db/prisma";
+import cors from "../../../utils/cors";
 
 /**
  * @openapi
@@ -80,7 +81,9 @@ import { prisma } from "../../../db/prisma";
  *                 content: "Post content"
  *                 creationDate: "2022-08-08T19:48:07.653Z"
  */
-export default function handler(req, res) {
+export default async function handler(req, res) {
+  await cors();
+
   if (req.method === "GET") {
     return getPosts(res);
   } else if (req.method === "POST") {
@@ -118,7 +121,6 @@ async function getPosts(res) {
       { success: true }
     );
   } catch (error) {
-    console.log(error);
     res
       .status(500)
       .json({ error: "Error retrieving the posts", success: false });
