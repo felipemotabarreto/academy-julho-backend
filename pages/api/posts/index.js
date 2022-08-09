@@ -24,60 +24,13 @@ import { prisma } from "../../../db/prisma";
  *                   type: string
  *                 teaser:
  *                   type: string
- *                 content:
- *                   type: string
- *                   format: rich-text
- *                 creationDate:
- *                   type: string
- *                   format: date-time
- *                 comments:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       title:
- *                         type: string
- *                       content:
- *                         type: string
- *                       author:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                           name:
- *                             type: string
- *                           email:
- *                             type: string
  *                 author:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
+ *                   type: string
  *               example:
- *                 id: 0
- *                 title: "Post title"
- *                 teaser: "Post teaser ..."
- *                 content: "Post content"
- *                 creationDate: "2022-08-08T19:48:07.653Z"
- *                 comments:
- *                   -  id: 0
- *                      title: "Comment title"
- *                      content: "Comment content"
- *                      author:
- *                        id: 0
- *                        name: "User Name"
- *                        email: "user.name@email.com"
- *                 author:
- *                   id: 0
- *                   name: "User Name"
- *                   email: "user.name@email.com"
- *
+ *                 - id: 1
+ *                   title: "Post title"
+ *                   teaser: "Post teaser ..."
+ *                   author: "User Name"
  *   post:
  *     summary: Create a new post
  *     tags:
@@ -120,53 +73,12 @@ import { prisma } from "../../../db/prisma";
  *                 creationDate:
  *                   type: string
  *                   format: date-time
- *                 comments:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       title:
- *                         type: string
- *                       content:
- *                         type: string
- *                       author:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                           name:
- *                             type: string
- *                           email:
- *                             type: string
- *                 author:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: integer
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
  *               example:
- *                 id: 0
+ *                 id: 1
  *                 title: "Post title"
  *                 teaser: "Post teaser ..."
  *                 content: "Post content"
  *                 creationDate: "2022-08-08T19:48:07.653Z"
- *                 comments:
- *                   -  id: 0
- *                      title: "Comment title"
- *                      content: "Comment content"
- *                      author:
- *                        id: 0
- *                        name: "User Name"
- *                        email: "user.name@email.com"
- *                 author:
- *                   id: 0
- *                   name: "User Name"
- *                   email: "user.name@email.com"
  */
 export default function handler(req, res) {
   if (req.method === "GET") {
@@ -186,13 +98,25 @@ async function getPosts(res) {
       orderBy: {
         creationDate: "desc",
       },
-      include: {
-        comments: true,
-        author: true,
+      select: {
+        id: true,
+        title: true,
+        teaser: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 
-    return res.status(200).json(posts, { success: true });
+    return res.status(200).json(
+      posts.map(({ author, ...rest }) => ({
+        ...rest,
+        author: author.name,
+      })),
+      { success: true }
+    );
   } catch (error) {
     console.log(error);
     res
@@ -212,9 +136,12 @@ async function createPost(req, res) {
         authorId: userId,
         creationDate: new Date().toISOString(),
       },
-      include: {
-        author: true,
-        comments: true,
+      select: {
+        id: true,
+        title: true,
+        teaser: true,
+        content: true,
+        creationDate: true,
       },
     });
 

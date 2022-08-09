@@ -10,10 +10,11 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String
-  Post  Post[]
+  id      Int       @id @default(autoincrement())
+  name    String
+  email   String
+  Post    Post[]
+  Comment Comment[]
 }
 
 model Post {
@@ -28,9 +29,11 @@ model Post {
 }
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  title   String
-  content String
-  post    Post   @relation(fields: [postId], references: [id])
-  postId  Int
+  id       Int    @id @default(autoincrement())
+  title    String
+  content  String
+  post     Post   @relation(fields: [postId], references: [id])
+  postId   Int
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId Int
 }

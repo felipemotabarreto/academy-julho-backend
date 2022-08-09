@@ -32,7 +32,7 @@ import { prisma } from "../../../db/prisma";
  *                 email:
  *                   type: string
  *               example:
- *                 id: 0
+ *                 id: 1
  *                 name: "User Name"
  *                 email: "user.name@email.com"
  */
@@ -57,7 +57,7 @@ async function getUserByEmail(req, res) {
     if (user) {
       return res.status(200).json(user, { success: true });
     }
-    res.status(400).json({
+    res.status(404).json({
       error: "Could not found user with specified email",
       success: false,
     });

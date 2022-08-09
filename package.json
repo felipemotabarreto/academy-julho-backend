@@ -4,7 +4,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:connect": "pscale connect academy-julho main --port 3309",
+    "db:connect-dev": "pscale connect academy-julho develop --port 3309",
+    "db:push": "prisma db push",
+    "db:ui": "prisma studio"
   },
   "dependencies": {
     "next": "12.1.4",
