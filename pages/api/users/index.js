@@ -1,4 +1,21 @@
 import { prisma } from "../../../db/prisma";
+import Cors from "cors";
+
+const cors = Cors({
+  methods: ["GET"],
+});
+
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
 
 /**
  * @swagger
@@ -47,6 +64,7 @@ export default function handler(req, res) {
 }
 
 async function getUserByEmail(req, res) {
+  await runMiddleware(req, res, cors);
   try {
     const user = await prisma.user.findFirst({
       where: {
