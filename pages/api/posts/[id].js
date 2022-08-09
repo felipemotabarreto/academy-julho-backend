@@ -88,7 +88,7 @@ import cors from "../../../utils/cors";
  *
  */
 export default async function handler(req, res) {
-  await cors();
+  await cors(req, res);
 
   if (req.method === "GET") {
     return getPostData(req, res);

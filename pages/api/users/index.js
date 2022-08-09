@@ -38,7 +38,7 @@ import cors from "../../../utils/cors";
  *                 email: "user.name@email.com"
  */
 export default async function handler(req, res) {
-  await cors();
+  await cors(req, res);
   if (req.method === "GET") {
     return getUserByEmail(req, res);
   } else {
@@ -73,6 +73,7 @@ async function getUserByEmail(req, res) {
       success: false,
     });
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ error: "Error retrieving the user", success: false });

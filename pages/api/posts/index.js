@@ -82,7 +82,7 @@ import cors from "../../../utils/cors";
  *                 creationDate: "2022-08-08T19:48:07.653Z"
  */
 export default async function handler(req, res) {
-  await cors();
+  await cors(req, res);
 
   if (req.method === "GET") {
     return getPosts(res);
@@ -121,6 +121,7 @@ async function getPosts(res) {
       { success: true }
     );
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ error: "Error retrieving the posts", success: false });
@@ -149,6 +150,7 @@ async function createPost(req, res) {
 
     return res.status(201).json(post, { success: true });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error creating the post", success: false });
   }
 }

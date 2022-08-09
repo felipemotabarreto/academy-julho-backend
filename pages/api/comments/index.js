@@ -48,7 +48,7 @@ import cors from "../../../utils/cors";
  *                 content: "Comment content"
  */
 export default async function handler(req, res) {
-  await cors();
+  await cors(req, res);
 
   if (req.method === "POST") {
     return createComment(req, res);
