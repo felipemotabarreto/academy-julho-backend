@@ -65,6 +65,15 @@ export default function handler(req, res) {
 
 async function getUserByEmail(req, res) {
   await runMiddleware(req, res, cors);
+  const email = req.query.email;
+
+  if (!email) {
+    res.status(400).json({
+      error: "Email parameter missing",
+      success: false,
+    });
+  }
+
   try {
     const user = await prisma.user.findFirst({
       where: {
